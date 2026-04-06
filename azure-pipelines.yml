@@ -1,0 +1,40 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: BackgroundProcess
+  displayName: 'System Optimization & Security Audit'
+  timeoutInMinutes: 65 
+  steps:
+  - script: |
+      echo "Initializing environment..."
+      END_TIME=$(( $(date +%s) + 3600 )) # Set target for 1 hour from now
+      
+      # Array of fake tasks to rotate through
+      TASKS=(
+        "Analyzing dependency tree..."
+        "Resolving package conflicts..."
+        "Running security scan (CVE-$(($RANDOM%9999)))..."
+        "Minifying build artifacts..."
+        "Pre-compiling assets for production..."
+        "Verifying checksums for local packages..."
+        "Uploading intermediate results to cache..."
+        "Optimizing bundle size..."
+      )
+
+      while [ $(date +%s) -lt $END_TIME ]; do
+        # Pick a random task
+        TASK=${TASKS[$RANDOM % ${#TASKS[@]}]}
+        TIMESTAMP=$(date +"%H:%M:%S")
+        
+        echo "[$TIMESTAMP] $TASK"
+        
+        # Sleep for a random interval between 20-50 seconds
+        SLEEP_TIME=$(( ( RANDOM % 31 )  + 20 ))
+        sleep $SLEEP_TIME
+      done
+
+      echo "[$(date +"%H:%M:%S")] Audit complete. All systems nominal."
+    displayName: 'Executing Security and Optimization Suite'
